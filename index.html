@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educational Work</title>
+    <title>Unblocked Games Hub</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -67,82 +67,34 @@
             border-color: var(--accent-color);
             box-shadow: 0 8px 15px rgba(0, 173, 181, 0.4);
         }
-
-        .status {
-            font-style: italic;
-            color: #888;
-        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Educational Work</h1>
-        <p>All lessons are loaded automatically from the repository.</p>
+        <h1>Unblocked Games Hub</h1>
+        <p>A static list of games that sorts themselves alphabetically automatically.</p>
     </header>
 
+    <!-- ADD YOUR GAMES DIRECTLY HERE -->
     <main class="grid" id="games-grid">
-        <p class="status" id="status-msg">Loading lessons...</p>
+        <a class="card" href="./html/game1.html">test</a>
     </main>
 
     <script>
-        // CONFIGURATION: Change these to match your GitHub repository
-        const USERNAME = 'freemathwork';
-        const REPO = 'educational-work';
-        const FOLDER_PATH = 'html'; 
+        document.addEventListener("DOMContentLoaded", () => {
+            const grid = document.getElementById("games-grid");
+            
+            // Convert the collection of game links into an array
+            const cards = Array.from(grid.getElementsByClassName("card"));
 
-        const grid = document.getElementById('games-grid');
-        const statusMsg = document.getElementById('status-msg');
+            // Sort the array alphabetically based on the visible text link
+            cards.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim()));
 
-        async function fetchGames() {
-            // GitHub API endpoint to list contents of a directory
-            const apiUrl = `https://github.com{USERNAME}/${REPO}/contents/${FOLDER_PATH}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch folder contents. Check your username, repository name, and folder path.');
-                }
-
-                const files = await response.json();
-                
-                // Filter for HTML files or folders (subdirectories representing games)
-                const gameFiles = files.filter(file => file.name.endsWith('.html') || file.type === 'dir');
-
-                if (gameFiles.length === 0) {
-                    statusMsg.textContent = 'No lessons found in the "html" folder.';
-                    return;
-                }
-
-                // Remove the loading message
-                statusMsg.remove();
-
-                gameFiles.forEach(file => {
-                    const card = document.createElement('a');
-                    card.className = 'card';
-                    
-                    // Format the display name (e.g., "super-mario.html" or "super-mario" -> "Super Mario")
-                    let gameName = file.name.replace('.html', '').replace(/[-_]/g, ' ');
-                    gameName = gameName.replace(/\b\w/g, char => char.toUpperCase());
-                    
-                    card.textContent = gameName;
-
-                    // Set target URL relative to your GitHub Pages deployment
-                    // Works whether it's a direct HTML file or a subfolder containing an index.html
-                    card.href = `./${FOLDER_PATH}/${file.name}`;
-                    
-                    grid.appendChild(card);
-                });
-
-            } catch (error) {
-                console.error(error);
-                statusMsg.textContent = 'Error loading lessons. Please check the console configuration.';
-                statusMsg.style.color = '#ff4a4a';
-            }
-        }
-
-        fetchGames();
+            // Clear the grid and re-append them in alphabetical order
+            grid.innerHTML = "";
+            cards.forEach(card => grid.appendChild(card));
+        });
     </script>
 </body>
 </html>
