@@ -1,1 +1,67 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4:3 Flash Game Player (Ruffle)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .game-container {
+            width: 100%;
+            height: 100%;
+            max-width: calc(100vh * (4 / 3));
+            max-height: calc(100vw * (3 / 4));
+            aspect-ratio: 4 / 3;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Ensure the generated ruffle player element fills the container */
+        #ruffle-player {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- Load the official Ruffle engine from the unpkg CDN -->
+    <script src="../assets/ruffle/ruffle.js"></script>
+</head>
+<body>
+    <div class="game-container" id="game-container">
+        <!-- Ruffle player will be automatically injected here -->
+    </div>
+
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.addEventListener("load", (event) => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            
+            player.id = "ruffle-player";
+            
+            const container = document.getElementById("game-container");
+            container.appendChild(player);
+            
+            // Replace 'your-game.swf' with your actual flash file name or file path
+            player.load({
+                url: "../assets/swf/bloons1.swf",
+                autoplay: "on",
+                unmuteOverlay: "hidden"
+            });
+        });
+    </script>
+</body>
+</html>
