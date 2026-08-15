@@ -30,36 +30,44 @@
             justify-content: center;
             align-items: center;
         }
-        /* Ensure the generated ruffle player element fills the container */
         #ruffle-player {
             width: 100%;
             height: 100%;
         }
     </style>
-    <!-- Load the official Ruffle engine from the unpkg CDN -->
+    <!-- 1. Load your local self-hosted script -->
     <script src="../assets/ruffle/ruffle.js"></script>
 </head>
 <body>
-    <div class="game-container" id="game-container">
-        <!-- Ruffle player will be automatically injected here -->
-    </div>
+    <div class="game-container" id="game-container"></div>
 
     <script>
         window.RufflePlayer = window.RufflePlayer || {};
-        window.addEventListener("load", (event) => {
+        
+        // Config options must be defined before creating the player instance
+        window.RufflePlayer.config = {
+            autoplay: "on",
+            unmuteOverlay: "hidden"
+        };
+
+        window.addEventListener("DOMContentLoaded", () => {
             const ruffle = window.RufflePlayer.newest();
-            const player = ruffle.createPlayer();
             
+            // Check if Ruffle script loaded successfully
+            if (!ruffle) {
+                console.error("Ruffle failed to initialize. Check your ruffle.js path.");
+                return;
+            }
+
+            const player = ruffle.createPlayer();
             player.id = "ruffle-player";
             
             const container = document.getElementById("game-container");
             container.appendChild(player);
             
-            // Replace 'your-game.swf' with your actual flash file name or file path
+            // 2. Load your local SWF file using the parent-relative path
             player.load({
-                url: "../assets/swf/bloons1.swf",
-                autoplay: "on",
-                unmuteOverlay: "hidden"
+                url: "../assets/swf/bloons1.swf"
             });
         });
     </script>
